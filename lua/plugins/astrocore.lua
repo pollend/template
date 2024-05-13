@@ -1,9 +1,24 @@
-if true then return {} end -- WARN: REMOVE THIS LINE TO ACTIVATE THIS FILE
-
 -- AstroCore provides a central place to modify mappings, vim options, autocommands, and more!
 -- Configuration documentation can be found with `:h astrocore`
 -- NOTE: We highly recommend setting up the Lua Language Server (`:LspInstall lua_ls`)
 --       as this provides autocomplete and documentation while editing
+
+local user_terminals = {}
+local function toggle_term_key(id)
+  local terms = user_terminals
+  -- if a command string is provided, create a basic table for Terminal:new() options
+  local opts = { hidden = true }
+  local num = vim.v.count > 0 and vim.v.count or 1
+  -- if terminal doesn't exist yet, create it
+  if not terms[id] then terms[id] = {} end
+  if not terms[id][num] then
+    if not opts.count then opts.count = vim.tbl_count(terms) * 100 + num end
+    if not opts.on_exit then opts.on_exit = function() terms[id][num] = nil end end
+    terms[id][num] = require("toggleterm.terminal").Terminal:new(opts)
+  end
+  -- toggle the terminal
+  terms[id][num]:toggle(10, "horizontal")
+end
 
 ---@type LazySpec
 return {
@@ -49,6 +64,11 @@ return {
         -- navigate buffer tabs with `H` and `L`
         L = { function() require("astrocore.buffer").nav(vim.v.count1) end, desc = "Next buffer" },
         H = { function() require("astrocore.buffer").nav(-vim.v.count1) end, desc = "Previous buffer" },
+        ["<leader>1"] = { function() toggle_term_key "t1" end, desc = "ToggleTerm 1" },
+        ["<leader>2"] = { function() toggle_term_key "t2" end, desc = "ToggleTerm 2" },
+        ["<leader>3"] = { function() toggle_term_key "t3" end, desc = "ToggleTerm 3" },
+        ["<leader>4"] = { function() toggle_term_key "t4" end, desc = "ToggleTerm 4" },
+        ["<leader>5"] = { function() toggle_term_key "t5" end, desc = "ToggleTerm 5" },
 
         -- mappings seen under group name "Buffer"
         ["<Leader>bD"] = {
