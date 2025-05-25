@@ -7,6 +7,8 @@
 return {
   "AstroNvim/astrocommunity",
   { import = "astrocommunity.pack.lua" },
-  { import = "astrocommunity.recipes.telescope-lsp-mappings" },
+  { import = "astrocommunity.completion.copilot-lua" },
+  { import = "astrocommunity.pack.rust" },
+  -- { import = "astrocommunity.recipes.telescope-lsp-mappings" },
   -- import/override with your plugins folder
 }
